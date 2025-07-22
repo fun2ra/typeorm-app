@@ -1,0 +1,14 @@
+### get all messages
+GET http://localhost:3000/auth/users
+
+### get a specific message
+GET http://localhost:3000/auth/88
+
+### create a new message
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+  "email": "pepito@pepe.io",
+  "password": "12345678"
+}
