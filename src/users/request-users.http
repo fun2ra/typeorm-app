@@ -2,7 +2,7 @@
 GET http://localhost:3000/auth/2
 
 ### get a user by email
-GET http://localhost:3000/auth?email=pepito@pepe.ios
+GET http://localhost:3000/auth?email=pepito@pepe.io
 
 ### create a new user
 POST http://localhost:3000/auth/signup

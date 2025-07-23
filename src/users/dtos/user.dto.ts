@@ -1,21 +1,12 @@
-import { IsEmail, IsString } from 'class-validator';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 export class UserDto {
-  constructor(partial: Partial<UserDto>) {
-    if (partial.email) {
-      this.email = partial.email;
-    }
+  @Expose()
+  id: number;
 
-    if (partial.password) {
-      this.password = partial.password;
-    }
-  }
-
-  @IsEmail()
+  @Expose()
   email: string;
 
   @Exclude()
-  @IsString()
   password: string;
 }
