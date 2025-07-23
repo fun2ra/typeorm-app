@@ -7,10 +7,13 @@ import {
   Patch,
   Query,
   ParseIntPipe,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { UserSerializeInterceptor } from './interceptors/user-serialize.interceptor';
 
 @Controller('auth')
 export class UsersController {
@@ -21,13 +24,13 @@ export class UsersController {
   }
 
   @Get('/:id')
+  @UserSerializeInterceptor()
   find(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);
   }
 
   @Get()
   findUser(@Query('email') email: string) {
-    console.log(`Searching for user with email: ${email}`);
     return this.usersService.findUser(email);
   }
 
