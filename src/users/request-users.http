@@ -1,14 +1,22 @@
-### get all messages
-GET http://localhost:3000/auth/users
+### get user by id
+GET http://localhost:3000/auth/2
 
-### get a specific message
-GET http://localhost:3000/auth/88
+### get a user by email
+GET http://localhost:3000/auth?email=pepito@pepe.ios
 
-### create a new message
+### create a new user
 POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
 {
   "email": "pepito@pepe.io",
   "password": "12345678"
+}
+
+### update a user
+PATCH http://localhost:3000/auth/2
+Content-Type: application/json  
+
+{
+  "email": "qwerty@asdf.com"
 }
