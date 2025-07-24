@@ -4,13 +4,23 @@ GET http://localhost:3000/auth/2
 ### get a user by email
 GET http://localhost:3000/auth?email=pepito@pepe.io
 
-### create a new user
+### SignUp 
 POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
 {
-  "email": "pepito@pepe.io",
-  "password": "12345678"
+  "email": "pepeto@pepe.io",
+  "password": "qwerty"
+}
+
+
+### SignIn
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+  "email": "pepeto@pepe.io",
+  "password": "qwerty"
 }
 
 ### update a user
