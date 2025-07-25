@@ -7,20 +7,18 @@ import {
   Patch,
   Query,
   ParseIntPipe,
-  Res,
-  Req,
-  UnauthorizedException,
+  Session,
+  UseInterceptors,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth/auth.service';
-import { Request } from 'express';
+import { CurrentUser } from '../decorators/current-user.decorator';
+import { UserInterceptor } from 'src/interceptors/current-user.interceptor';
 
-import { SignedCookies } from 'src/decorators/signed-cookies.decorator';
 @Controller('auth')
 @Serialize(UserDto)
 export class UsersController {
@@ -35,29 +33,32 @@ export class UsersController {
   }
 
   @Post('/signin')
-  async signin(
-    @Body() user: CreateUserDto,
-    @Res({ passthrough: true }) response: Response,
-  ) {
+  async signin(@Body() user: CreateUserDto, @Session() session: any) {
     const signedUser = await this.authService.signin(user.email, user.password);
 
-    response.cookie('id', signedUser.id, {
-      signed: true,
-    });
+    session.userId = signedUser.id;
 
     return signedUser;
+  }
+
+  @Post('/signout')
+  signout(@Session() session: any) {
+    session.currentUser = null;
+    session.userId = null;
+  }
+
+  @Get('/whoami')
+  whoIAm(@Session() session: any) {
+    return session.userId;
   }
 
   @Get('/:id')
   async find(
     @Param('id', ParseIntPipe) id: number,
-    @SignedCookies('id') cookieId: string,
+    @CurrentUser() signedInUser: UserDto,
   ) {
-    console.log('Cookie ID:', cookieId);
-    if (!id) {
-      throw new UnauthorizedException('User ID is required');
-    }
     const user = await this.usersService.findOne(id);
+    console.log('Signed in user:', signedInUser);
 
     return user;
   }
